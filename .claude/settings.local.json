@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git credential-manager:*)",
+      "Bash(npm run build:*)"
+    ]
+  }
+}

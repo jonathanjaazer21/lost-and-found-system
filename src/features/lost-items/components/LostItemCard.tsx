@@ -28,25 +28,26 @@ export function LostItemCard({ item, onStatusUpdate, onEdit }: LostItemCardProps
               item.status === 'unclaimed' ? 'badge-warning' : 'badge-success'
             }`}
           >
-            {item.status}
+            {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
           </div>
         </div>
 
-        {item.mobile_number && (
-          <p className="text-sm">
-            <span className="font-semibold">Contact:</span> {item.mobile_number}
-          </p>
-        )}
-
-        {item.upload_url && (
-          <div>
+        {/* Image preview - always visible with fixed landscape aspect ratio */}
+        <div className="w-full aspect-video bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+          {item.upload_url ? (
             <img
               src={item.upload_url}
               alt="Lost item"
-              className="w-full h-48 object-cover rounded-lg"
+              className="w-full h-full object-cover"
             />
-          </div>
-        )}
+          ) : (
+            <div className="text-gray-400 text-sm">No image</div>
+          )}
+        </div>
+
+        <p className="text-sm">
+          <span className="font-semibold">Contact:</span> {item.mobile_number || 'None'}
+        </p>
 
         <p className="text-xs text-gray-500">
           Reported: {item.created_at.toDate().toLocaleDateString()}
