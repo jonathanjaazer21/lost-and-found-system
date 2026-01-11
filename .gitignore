@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+.react-router
+build
 
 # Editor directories and files
 .vscode/*
@@ -27,9 +29,8 @@ dist-ssr
 .env
 .env.local
 .env.production
-AGENT.md
-STACK_DESIGN.md
-STRUCTURE_DESIGN.md
-USER_STORIES.md
-DEVELOPMENT.md
-CONTRIBUTING.md
+
+SETUP_EMAIL_NOTIFICATIONS.md
+SSR_MIGRATION_GUIDE.md
+CLEANUP_SUMMARY.md 
+SSR_FIXES.md
