@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useFetcher } from "react-router";
 
 import { getLostItems, createLostItem, updateLostItemStatus, updateLostItem } from "~/services/firestore/lostItemsService";
 import { getAllReceivers, addReceiverEmail, removeReceiverEmail } from "~/services/firestore/receiversService";
@@ -62,6 +63,26 @@ export default function Dashboard() {
     upload_url?: string;
   }) => {
     await createLostItem(data.description, data.mobile_number, data.upload_url);
+
+    // Send email notification server-side
+    if (typeof window !== 'undefined') {
+      try {
+        await fetch('/api/notify-create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            description: data.description,
+            mobile_number: data.mobile_number,
+            upload_url: data.upload_url,
+            status: 'unclaimed',
+            recipients: emails,
+          }),
+        });
+      } catch (err) {
+        console.error('Failed to send email notification:', err);
+      }
+    }
+
     await refreshData();
     setIsModalOpen(false);
   };
@@ -79,6 +100,26 @@ export default function Dashboard() {
     if (!itemToEdit) return;
 
     await updateLostItem(itemToEdit.id, data);
+
+    // Send email notification server-side
+    if (typeof window !== 'undefined') {
+      try {
+        await fetch('/api/notify-update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            description: data.description,
+            mobile_number: data.mobile_number,
+            upload_url: data.upload_url,
+            status: itemToEdit.status,
+            recipients: emails,
+          }),
+        });
+      } catch (err) {
+        console.error('Failed to send email notification:', err);
+      }
+    }
+
     await refreshData();
     setIsEditModalOpen(false);
     setItemToEdit(null);
